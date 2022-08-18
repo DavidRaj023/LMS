@@ -1,0 +1,25 @@
+﻿@model LMS.Models.Category
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<div class="text-Left">
+    <h1 class="display-6">Category</h1>
+    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+</div>
+
+@using (Html.BeginForm("SaveCategory", "Books"))
+{
+    <div class="row mb-3">
+        <div class="col-sm-1 col-form-label">
+            @Html.LabelFor(m => m.Name)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-primary">Add</button>
+}
+

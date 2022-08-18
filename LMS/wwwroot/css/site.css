@@ -1,0 +1,38 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-image: url(../Images/Bg.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+navbar {
+    color: #ff0000;
+    padding-block: 20px;
+}
+.nav {
+    padding-right: 30px;
+}
+
+#home{
+    display: flex;
+    justify-content: center;
+}
+#home_image {
+    max-width: 30%;
+    max-height: 30%;
+    background-position: center;
+}

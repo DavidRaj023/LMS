@@ -1,0 +1,17 @@
+﻿@model IEnumerable<LMS.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="text-Left">
+    <h1 class="display-6">Categories</h1>
+    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+</div>
+
+<div class="row align-self-lg-stretch">
+    @foreach(var category in Model){
+        <div class="col-lg-4 btn">
+            <a class="btn" href="@category.Id">@category.Name</a>
+        </div>
+    }
+</div>
