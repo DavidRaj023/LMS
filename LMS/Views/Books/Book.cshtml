@@ -6,11 +6,24 @@
 <div>
     <a asp-controller="Books" class="btn btn-secondary" style="width:150px">Back</a>
     <div id="bookcard">
-        <div id="img-con">
-            <img id="bookcard-img" class="rounded" src="/Images/BookImage.jpg"/>
-        </div>
-        <div id="bookcard-info">
-            <h3>@Model.Title</h3>
+        <div class="row">
+            <div id="img-con" class="col-4">
+                <img id="bookcard-img" class="rounded" src="/Images/BookImage.jpg"/>
+            </div>
+            <div id="bookcard-info" class="col">
+                <h2>@Model.Title</h2>
+                <p>@Model.Description</p>
+                <h5>Author: @Model.Author.Name</h5>
+                <h6>Edition: @Model.Edition</h6>
+                <div>
+                    @if (@Model.IsAvailable)
+                    {
+                        <a class="btn btn-outline-success"  href="">Add to Readings</a>    
+                    }else{
+                        <a class="btn btn-danger" >Not Available</a>    
+                    }
+              </div>
+            </div>
         </div>
     </div>
 </div>
