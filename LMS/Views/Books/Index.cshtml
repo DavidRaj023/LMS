@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<LMS.Models.Book>
 @{
+    ViewData["Title"] = "Books";
 }
+
+<div class="container ">
+    <div class="row">
+        <div class="mb-3 col-1">
+            <h2 class="display-6">Books</h2>
+        </div>
+        <div class="col-md-3 ms-auto">
+            <a asp-controller="Books" asp-action="New" class="btn btn-primary" style="width:150px">
+            Add Book</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach(var book in Model)
+    {
+        <div class="col-sm-4 btn">
+            <div class="card" style="width: 18rem;" >
+              <img class="card-img-top" src="/Images/BookImage.jpg" alt="Card image Book"/ style="width: 100%; height: 15vw; object-fit: scale-down; padding: 10px;">
+              <div class="card-title">
+                <p class="card-text">@book.Title</p>
+              </div>
+              <div class="card-body">
+                <p style="font-size: 13px;">@book.Description</p>
+              </div>
+              <div class="card-footer">
+                    @if (@book.IsAvailable)
+                    {
+                        <a class="btn btn-outline-success"  href="Books?id=@book.Id">Available</a>    
+                    }else{
+                        <a class="btn btn-outline-danger" >Not Available</a>    
+                    }
+              </div>
+            </div>
+        </div>
+    }
+</div>

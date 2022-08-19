@@ -48,3 +48,16 @@ navbar {
     width: 1.5em;
     height: 1.5em;
 }
+
+#bookcard {
+    background-color: #000000;
+    margin: 25px;
+    
+}
+#bookcard-img{
+    width: 300px;
+    max-height: 500px;
+}
+#bookcard-info{
+
+}

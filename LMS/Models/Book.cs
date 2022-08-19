@@ -24,7 +24,7 @@ namespace LMS.Models
         public int Edition { get; set; }
         
         [Required]
-        public bool IsAvailable { get; set; } = false;
+        public bool IsAvailable { get; set; } = true;
 
         [Display(Name = "Rack No ")]
         public int RackId { get; set; }

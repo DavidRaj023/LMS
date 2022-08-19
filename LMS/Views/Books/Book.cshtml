@@ -1,0 +1,17 @@
+﻿@model LMS.Models.Book
+@{
+    ViewData["Title"] = "Book";
+}
+
+<div>
+    <a asp-controller="Books" class="btn btn-secondary" style="width:150px">Back</a>
+    <div id="bookcard">
+        <div id="img-con">
+            <img id="bookcard-img" class="rounded" src="/Images/BookImage.jpg"/>
+        </div>
+        <div id="bookcard-info">
+            <h3>@Model.Title</h3>
+        </div>
+    </div>
+</div>
+

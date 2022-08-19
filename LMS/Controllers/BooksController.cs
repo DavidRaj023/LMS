@@ -3,6 +3,7 @@ using LMS.Models;
 using LMS.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Controllers
 {
@@ -14,7 +15,11 @@ namespace LMS.Controllers
         {
             _context = context;
         }
-        
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         //Category
         public IActionResult Category()
         {
@@ -56,10 +61,20 @@ namespace LMS.Controllers
         }
 
         //Books
-        public IActionResult Index()
+        public IActionResult Index(int? id)
         {
-            var books = _context.Books.ToList();
-            return View("List", books);
+            if (id == null || id == 0)
+            {
+                var books = _context.Books
+                    .Include(b => b.Category)
+                    .Include(b => b.Author).ToList();
+                return View(books);
+            }
+            var book = _context.Books
+                    .Include(b => b.Category)
+                    .Include(b => b.Author)
+                    .FirstOrDefault(b => b.Id == id);
+            return View("book", book);
         }
         
         public IActionResult New()
