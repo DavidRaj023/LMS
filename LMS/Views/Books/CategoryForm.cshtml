@@ -2,24 +2,21 @@
 @{
     ViewData["Title"] = "Create Category";
 }
-
-<div class="text-Left">
-    <h1 class="display-6">Category</h1>
-    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
-</div>
-
-@using (Html.BeginForm("SaveCategory", "Books"))
-{
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            @Html.LabelFor(m => m.Name)
-        </div>
-        <div class="col-sm-3">
-            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Name)
-        </div>
-    </div>
-    @Html.HiddenFor(m => m.Id)
-    <button type="submit" class="btn btn-primary">Add</button>
-}
+<form method="post" asp-action="SaveCategory" asp-controller="Books">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2>Create Category</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Name"></label>
+			<input asp-for="Name" class="form-control" />
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+		<button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+		<a asp-controller="Books" asp-action="Category" class="btn btn-secondary" style="width:150px">
+			Back to List
+		</a>
+	</div>
+</form>
 

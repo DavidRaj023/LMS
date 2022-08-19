@@ -1,0 +1,85 @@
+﻿@model LMS.Models.Author
+@{
+    ViewData["Title"] = "Create Author";
+}
+
+@*@using (Html.BeginForm("SaveAuthor", "Books"))
+{
+    <div class="row mb-3">
+        <div class="col-sm-1 col-form-label">
+            @Html.LabelFor(m => m.Name)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-1 col-form-label">
+            @Html.LabelFor(m => m.Phone)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Phone)
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-1 col-form-label">
+            @Html.LabelFor(m => m.Email)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-1 col-form-label">
+            @Html.LabelFor(m => m.Address)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Address)
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-primary">Add</button>
+}*@
+
+<form method="post" asp-action="SaveAuthor" asp-controller="Books">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2>Create Author</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Name"></label>
+			<input asp-for="Name" class="form-control" />
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+        <div class="mb-3">
+			<label asp-for="Phone"></label>
+			<input asp-for="Phone" class="form-control" />
+			<span asp-validation-for="Phone" class="text-danger"></span>
+		</div>
+        <div class="mb-3">
+			<label asp-for="Email"></label>
+			<input asp-for="Email" class="form-control" />
+			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+        <div class="mb-3">
+			<label asp-for="Address"></label>
+			<input asp-for="Address" class="form-control" />
+			<span asp-validation-for="Address" class="text-danger"></span>
+		</div>
+		<button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+		<a asp-controller="Books" asp-action="Authors" class="btn btn-secondary" style="width:150px">
+			Back to List
+		</a>
+	</div>
+</form>
+
+

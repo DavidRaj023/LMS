@@ -3,15 +3,20 @@
     ViewData["Title"] = "Categories";
 }
 
-<div class="text-Left">
-    <h1 class="display-6">Categories</h1>
-    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+<div class="container text-center">
+    <div class="row">
+    <div class="mb-3 col-1">
+        <h2 class="display-6">Categories</h2>
+    </div>
+    <div class="col-md-4 ms-auto">
+        <a asp-controller="Books" asp-action="NewCategory" class="btn btn-primary" style="width:150px">Add Category</a>
+    </div>
 </div>
 
-<div class="row align-self-lg-stretch">
+<div class="row">
     @foreach(var category in Model){
-        <div class="col-lg-4 btn">
-            <a class="btn" href="@category.Id">@category.Name</a>
+        <div class="col-lg-4 btn  ">
+            <a class="btn btn-outline-primary" id="list-button" href="categoryId=@category.Id">@category.Name</a>
         </div>
     }
 </div>

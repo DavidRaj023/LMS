@@ -36,3 +36,15 @@ navbar {
     max-height: 30%;
     background-position: center;
 }
+
+#list-button {
+    height: auto;
+    width: 300px;
+    border-color: #04bcc6;
+    text-align: center
+}
+
+.datepicker td, .datepicker th {
+    width: 1.5em;
+    height: 1.5em;
+}
