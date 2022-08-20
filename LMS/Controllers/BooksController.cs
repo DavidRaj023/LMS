@@ -76,6 +76,26 @@ namespace LMS.Controllers
                     .FirstOrDefault(b => b.Id == id);
             return View("book", book);
         }
+
+        //Books/filter?category=3
+        //Books/filter?author=3
+        public IActionResult Filter(int? category, int? author)
+        {
+            if(category != null || author != null)
+            {
+                if (category.HasValue)
+                {
+                    var books = _context.Books.Where(b => b.Category.Id == category);
+                    return View("index", books);
+                }
+                if (author.HasValue)
+                {
+                    var books = _context.Books.Where(b =>b.Author.Id == author).ToList();
+                    return View("index", books);
+                }
+            }
+            return RedirectToAction("index", "Books");
+        }
         
         public IActionResult New()
         {

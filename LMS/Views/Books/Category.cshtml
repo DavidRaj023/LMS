@@ -16,7 +16,7 @@
 <div class="row">
     @foreach(var category in Model){
         <div class="col-lg-4 btn  ">
-            <a class="btn btn-outline-primary" id="list-button" href="categoryId=@category.Id">@category.Name</a>
+            <a class="btn btn-outline-primary" id="list-button" href="filter?category=@category.Id">@category.Name</a>
         </div>
     }
 </div>

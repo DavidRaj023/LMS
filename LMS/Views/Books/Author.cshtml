@@ -17,7 +17,7 @@
 <div class="row">
     @foreach(var author in Model){
         <div class="col-lg-4 btn">
-            <a class="btn btn-outline-primary" id="list-button" href="authorId=@author.Id">@author.Name</a>
+            <a class="btn btn-outline-primary" id="list-button" href="filter?author=@author.Id">@author.Name</a>
         </div>
     }
 </div>
