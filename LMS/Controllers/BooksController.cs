@@ -1,6 +1,7 @@
 ﻿using LMS.Data;
 using LMS.Models;
 using LMS.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace LMS.Controllers
     public class BooksController : Controller
     {
         private ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public BooksController(ApplicationDbContext context)
+        public BooksController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
         protected override void Dispose(bool disposing)
         {
@@ -96,7 +99,8 @@ namespace LMS.Controllers
             }
             return RedirectToAction("index", "Books");
         }
-        
+
+        [Authorize(Roles = "Admin")]
         public IActionResult New()
         {
             var categoryList = _context.Categories.Select(a => new SelectListItem()
@@ -120,9 +124,32 @@ namespace LMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SaveBooks(BookViewModel model)
+        public IActionResult SaveBooks(BookViewModel model, IFormFile? file)
         {
-            _context.Books.Add(model.Book);
+            string wwwRootPath = _hostEnvironment.WebRootPath;
+            if (file != null)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                var uploads = Path.Combine(wwwRootPath, @"Images\books");
+                var extension = Path.GetExtension(file.FileName);
+
+                if (model.Book.ImageUrl != null)
+                {
+                    var oldImagePath = Path.Combine(wwwRootPath, model.Book.ImageUrl.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    file.CopyTo(fileStreams);
+                }
+                model.Book.ImageUrl = @"\Images\books\" + fileName + extension;
+
+                _context.Books.Add(model.Book);
+            }
             _context.SaveChanges();
             return RedirectToAction("index", "Books");
         }
