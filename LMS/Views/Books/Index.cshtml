@@ -8,10 +8,13 @@
         <div class="mb-3 col-1">
             <h2 class="display-6">Books</h2>
         </div>
-        <div class="col-md-3 ms-auto">
-            <a asp-controller="Books" asp-action="New" class="btn btn-primary" style="width:150px">
-            Add Book</a>
-        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-3 ms-auto">
+                <a asp-controller="Books" asp-action="New" class="btn btn-primary" style="width:150px">
+                Add Book</a>
+            </div>
+        }
     </div>
 </div>
 

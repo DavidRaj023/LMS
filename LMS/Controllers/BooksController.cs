@@ -12,7 +12,7 @@ namespace LMS.Controllers
     {
         private ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-
+        
         public BooksController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
@@ -29,6 +29,8 @@ namespace LMS.Controllers
             var categories = _context.Categories.ToList();
             return View("Category", categories);
         }
+
+        [Authorize(Roles ="Admin")]
         public IActionResult NewCategory()
         {
             return View("CategoryForm");
@@ -36,6 +38,7 @@ namespace LMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult SaveCategory(Category model)
         {
             _context.Categories.Add(model);
@@ -49,6 +52,8 @@ namespace LMS.Controllers
             var authors = _context.Authors.ToList();
             return View("Author", authors);
         }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult NewAuthor()
         {
             return View("AuthorForm");
@@ -56,6 +61,7 @@ namespace LMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult SaveAuthor(Author model)
         {
             _context.Authors.Add(model);
@@ -100,7 +106,7 @@ namespace LMS.Controllers
             return RedirectToAction("index", "Books");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles ="Admin")]
         public IActionResult New()
         {
             var categoryList = _context.Categories.Select(a => new SelectListItem()
@@ -124,6 +130,7 @@ namespace LMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult SaveBooks(BookViewModel model, IFormFile? file)
         {
             string wwwRootPath = _hostEnvironment.WebRootPath;

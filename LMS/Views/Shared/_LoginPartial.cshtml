@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            @if(User.IsInRole("Admin"))
+            {
+                <li>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AdminSignUp" >Admin Registration</a>
+                </li>
+            }
+            <li>
+                <a class="nav-link text-dark" asp-area="" >Hello @User.Identity.Name </a>
+            </li>
+            <li>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LogOff">LogOut</a>
+            </li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Login</a>
+    </ul>
+}

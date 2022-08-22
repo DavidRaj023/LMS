@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LMS.Models
 {
@@ -14,6 +16,11 @@ namespace LMS.Models
         public string UserName { get; set; }
         [Required]
         public string Password { get; set; }
+
+        [ForeignKey("RoleId")]
+        [ValidateNever]
+        public Role? Role { get; set; }
+        public int RoleId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

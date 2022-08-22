@@ -8,7 +8,14 @@
     @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
 </div>
 
-@using (Html.BeginForm("Enter", "Login"))
+@if(@ViewBag.Message != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+      @ViewBag.Message
+    </div>
+    
+}
+@using (Html.BeginForm("Login", "Account"))
 {
     <div class="row mb-3">
         <div class="col-sm-1 col-form-label">
@@ -31,4 +38,4 @@
 
     <button type="submit" class="btn btn-primary">Login</button>
 }
-<a asp-controller="Login" asp-action="SignUp">Click here to signup</a>
+<a asp-controller="Account" asp-action="SignUp">Click here to signup</a>
