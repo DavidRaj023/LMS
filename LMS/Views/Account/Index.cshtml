@@ -12,8 +12,7 @@
 {
     <div class="alert alert-danger alert-dismissible fade show">
       @ViewBag.Message
-    </div>
-    
+    </div>   
 }
 @using (Html.BeginForm("Login", "Account"))
 {
@@ -22,7 +21,7 @@
             @Html.LabelFor(m => m.UserName)
         </div>
         <div class="col-sm-3">
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control"})
             @Html.ValidationMessageFor(m => m.UserName)
         </div>
     </div>
@@ -31,7 +30,7 @@
             @Html.LabelFor(m => m.Password)
         </div>
         <div class="col-sm-3">
-            @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Password)
         </div>
     </div>

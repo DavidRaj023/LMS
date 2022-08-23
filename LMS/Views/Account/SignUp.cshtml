@@ -8,6 +8,12 @@
     @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
 </div>
 
+@if(@ViewBag.Message != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+      @ViewBag.Message
+    </div>   
+}
 @using (Html.BeginForm("New", "Account"))
 {
     <div class="row mb-3">
@@ -27,16 +33,6 @@
         <div class="col-sm-3">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Email)
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            @Html.LabelFor(m => m.Phone)
-        </div>
-        <div class="col-sm-3">
-            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Phone)
         </div>
     </div>
 

@@ -3,12 +3,19 @@
     ViewData["Title"] = "Book";
 }
 
+@if(@ViewBag.Message != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+      @ViewBag.Message
+    </div>   
+}
+
 <div>
     <a asp-controller="Books" class="btn btn-secondary" style="width:150px">Back</a>
     <div id="bookcard">
         <div class="row">
             <div id="img-con" class="col-4">
-                <img id="bookcard-img" class="rounded" src="/Images/BookImage.jpg"/>
+                <img id="bookcard-img" class="rounded" src="@Model.ImageUrl"/>
             </div>
             <div id="bookcard-info" class="col">
                 <h2>@Model.Title</h2>
@@ -16,9 +23,9 @@
                 <h5>Author: @Model.Author.Name</h5>
                 <h6>Edition: @Model.Edition</h6>
                 <div>
-                    @if (@Model.IsAvailable)
+                    @if (@Model.IsAvailable && @Model.NumberOfCopies >0)
                     {
-                        <a class="btn btn-outline-success"  href="">Add to Readings</a>    
+                        <a class="btn btn-outline-success" asp-action="AddToReadings" asp-route-bookId="@Model.Id" asp-controller="Books">Add to Readings</a>    
                     }else{
                         <a class="btn btn-danger" >Not Available</a>    
                     }

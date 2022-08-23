@@ -1,0 +1,30 @@
+﻿@model LMS.Models.ReviewViewModel
+@{
+    ViewData["Title"] = "Review";
+}
+
+<form method="post" asp-action="SaveAuthor" asp-controller="Books">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2>Review</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Review.StarValue"></label>
+			<input asp-for="Review.StarValue" class="form-control" min="0" max="5" />
+			<span asp-validation-for="Review.StarValue" class="text-danger"></span>
+		</div>
+        <div class="mb-3">
+			<label asp-for="Review.Description"></label>
+			<textarea asp-for="Review.Description" rows="3" class="form-control"></textarea>
+			<span asp-validation-for="Review.Description" class="text-danger"></span>
+		</div>
+		
+        <button type="submit" class="btn btn-primary"  asp-controller="Books" asp-action="SubmitReview" asp-route-rentalId=@Model.Rental.Id style="width:150px">Submit</button>
+		<a asp-controller="Books" asp-action="MyReadings" class="btn btn-secondary" style="width:150px">
+			Back to List
+		</a>
+	</div>
+</form>
+
+

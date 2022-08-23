@@ -16,5 +16,7 @@ namespace LMS.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LMS.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using LMS.Data;
 using LMS.Models;
 using LMS.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -8,15 +9,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-        
-        public BooksController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
+        public INotyfService _notifyService { get; }
+
+        public BooksController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment, INotyfService notifyService)
         {
             _context = context;
             _hostEnvironment = hostEnvironment;
+            _notifyService = notifyService;
         }
         protected override void Dispose(bool disposing)
         {
@@ -76,7 +80,9 @@ namespace LMS.Controllers
             {
                 var books = _context.Books
                     .Include(b => b.Category)
-                    .Include(b => b.Author).ToList();
+                    .Include(b => b.Author)
+                    .Where(b => b.IsAvailable == true)
+                    .ToList();
                 return View(books);
             }
             var book = _context.Books
@@ -161,5 +167,96 @@ namespace LMS.Controllers
             return RedirectToAction("index", "Books");
         }
 
+        //AddReading
+        public IActionResult AddToReadings(int bookId)
+        {
+            var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+
+            /*var myBooks = _context.Rentals
+                .Where(r => r.UserId == user.Id && r.BookId == bookId).ToList();*/
+            var myBooks = _context.Rentals
+                .Where(r => r.UserId == user.Id && r.BookId == bookId && r.IsReturned ==false).ToList();
+
+            if (myBooks.Count > 0)
+            {
+                _notifyService.Error("This book is already in your readings list");
+                return RedirectToAction("Index", bookId);
+            }
+
+            var bookInDb = _context.Books.Where(b => b.NumberOfCopies >0 && b.Id == bookId).FirstOrDefault();
+
+            if(bookInDb == null)
+            {
+                _notifyService.Error("This book is not available");
+                return RedirectToAction("Index", bookId);
+            }
+
+            var rendal = new Rental
+            {
+                BookId = bookId,
+                UserId = user.Id
+            };
+
+            bookInDb.NumberOfCopies--;
+            
+            _context.Rentals.Add(rendal);
+            _context.SaveChanges();
+            
+            _notifyService.Success("Added to My Readings");
+            return RedirectToAction("Index", bookId);
+        }
+
+        public IActionResult MyReadings()
+        {
+            var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+            
+            var rentals = _context.Rentals.Include(r => r.Book).Where(r => r.UserId == user.Id && r.IsReturned ==false).ToList();
+
+            foreach(var rental in rentals)
+            {
+                if(DateTime.Now > rental.DateRented.AddDays(rental.Book.ReturnThreshold))
+                {
+                    rental.PenaltyAmount = 10 * Math.Truncate((DateTime.Now - rental.DateRented.AddDays(rental.Book.ReturnThreshold)).TotalDays);
+                }
+            }
+            _context.SaveChanges();
+            return View(rentals);
+        }
+
+        public IActionResult MyReview(int rentId)
+        {
+            var rentDetails = _context.Rentals.FirstOrDefault(r => r.Id == rentId);
+            var model = new ReviewViewModel
+            {
+                Rental = rentDetails
+            };
+            return View(model);
+        }
+
+        public IActionResult SubmitReview(ReviewViewModel model, int rentalId)
+        {
+            var rentalDetials = _context.Rentals.FirstOrDefault(r => r.Id == rentalId);
+            var bookDetials = _context.Books.FirstOrDefault(b => b.Id == rentalDetials.BookId);
+            if(rentalDetials == null)
+            {
+                _notifyService.Error("Something went wrong, Please try again");
+                return RedirectToAction("MyReadings", "Books");
+            }
+
+            var myReview = new Review
+            {
+                UserId = rentalDetials.UserId,
+                BookId = rentalDetials.BookId,
+                StarValue = model.Review.StarValue,
+                Description = model.Review.Description
+            };
+
+            _context.Reviews.Add(myReview);
+            //Change 
+            rentalDetials.IsReturned = true;
+            bookDetials.NumberOfCopies++;
+            _context.SaveChanges();
+            return RedirectToAction("MyReadings", "Books");
+        }
     }
 }

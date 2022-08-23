@@ -35,7 +35,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <a class="nav-link text-primary " asp-area="" asp-controller="Book" asp-action="MyReadings">My Readings</a>
+                                <a class="nav-link text-primary " asp-area="" asp-controller="Books" asp-action="MyReadings">My Readings</a>
                             </li>
                         }
                     </ul>
@@ -63,6 +63,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
+    
 </body>
 </html>

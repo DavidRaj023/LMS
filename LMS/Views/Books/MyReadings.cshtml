@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LMS.Models.Rental>
+@{
+    ViewData["Title"] = "Books";
+}
+
+<div class="container ">
+    <div class="row">
+        <div class="mb-3 col-1">
+            <h2 class="display-6">Books</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach(var rent in Model)
+    {
+        <div class="col-sm-4 btn">
+            <div class="card shadow-sm" style="width: 20rem;" >
+              <img class="card-img-top" src="@rent.Book.ImageUrl" alt="Card image Book"/ style="width: 100%; height: 15vw; object-fit: scale-down; padding: 10px;">
+              <div class="card-header">
+                <h6 class="card-text">@rent.Book.Title</h6>
+              </div>
+
+            @if (rent.IsReturned)
+            {
+                <div class="card-footer">
+                    <h5 class="text-success">Completed</h5>
+                    <a class="btn btn-outline-success form-control" asp-controller="Books" asp-action="AddToReadings" asp-route-bookId="@rent.BookId">Read Again</a>    
+                </div>
+            }
+            else
+            {
+                <div class="card-body">
+                    <h6 class="card-text">Rented Date: @rent.DateRented.ToString("dd/MM/yyyy")</h6>
+                        @if(DateTime.Now > rent.DateRented.AddDays(@rent.Book.ReturnThreshold))
+                        {
+                            <h6 class="card-text text-danger">Due Date: @rent.DateRented.AddDays(@rent.Book.ReturnThreshold).ToString("dd/MM/yyyy")</h6>
+                            <h6 class="text-danger">Penalty Amount:  @rent.PenaltyAmount</h6>
+                        }
+                        else
+                        {
+                            <h6 class="card-text">Due Date: @rent.DateRented.AddDays(@rent.Book.ReturnThreshold).ToString("dd/MM/yyyy")</h6>
+                        }
+                    </div>
+                <div class="card-footer">
+                    <a class="btn btn-outline-primary form-control"  asp-controller="Books" asp-action="MyReview" asp-route-rentId="@rent.Id">Procedure to Return</a>    
+                </div>
+            }
+            </div>
+        </div>
+    }
+</div>

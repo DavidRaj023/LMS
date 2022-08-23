@@ -48,6 +48,21 @@ namespace LMS.Controllers
                 Password = user.Password,
                 RoleId = 2
             };
+            var isUsername = _context.Users.Where(u => u.UserName == userData.UserName).FirstOrDefault();
+
+            if (isUsername != null)
+            {
+                ViewBag.Message = "UserName is already taken";
+                return View("SignUp");
+            }
+            var isEmail = _context.Users.Where(u => u.Email == userData.Email).FirstOrDefault();
+            if (isEmail != null)
+            {
+                ViewBag.Message = "Email is already taken";
+                return View("SignUp");
+            }
+
+
             _context.Users.Add(userData);
             _context.SaveChanges();
             return RedirectToAction("Index");
