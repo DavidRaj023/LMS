@@ -21,6 +21,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(x => x.LoginPath = "/Account");
 /*builder.Services.AddTransient<ITokenService, TokenService>();*/
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

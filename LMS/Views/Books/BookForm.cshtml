@@ -71,7 +71,7 @@
 			<select asp-for="Book.CategoryId" asp-items="@Model.CategoryList" class="form-select">
 				<option disabled selected>--Select Category--</option>
 			</select>
-			<span asp-validation-for="Book.Category" class="text-danger"></span>
+			<span asp-validation-for="Book.CategoryId" class="text-danger"></span>
 		</div>
 
 		<div class="mb-3 col-6">
@@ -80,12 +80,13 @@
 			<select asp-for="Book.AuthorId" asp-items="@Model.AuthorList" class="form-select">
 				<option disabled selected>--Select Author--</option>
 			</select>
-			<span asp-validation-for="Book.Author" class="text-danger"></span>
+			<span asp-validation-for="Book.AuthorId" class="text-danger"></span>
 		</div>
 
 		<div class="mb-3 col-6">
 			<label asp-for="Book.ImageUrl"></label>
 			<input type="file" id="uploadBox" name="file" class="form-control" />
+			<span asp-validation-for="Book.ImageUrl" class="text-danger"></span>
 		</div>
 
 		<div class="col-12">

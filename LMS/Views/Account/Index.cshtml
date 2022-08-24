@@ -18,20 +18,20 @@
 {
     <div class="row mb-3">
         <div class="col-sm-1 col-form-label">
-            @Html.LabelFor(m => m.UserName)
+            <label asp-for=UserName class="control-label"></label>
         </div>
         <div class="col-sm-3">
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control"})
-            @Html.ValidationMessageFor(m => m.UserName)
+            <input asp-for=UserName class="form-control" />
+             <span asp-validation-for=UserName class="text-danger"></span>
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-sm-1 col-form-label">
-            @Html.LabelFor(m => m.Password)
+            <label asp-for=Password class="control-label"></label>
         </div>
         <div class="col-sm-3">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password)
+            <input asp-for=Password class="form-control" />
+             <span asp-validation-for=Password class="text-danger"></span>
         </div>
     </div>
 

@@ -38,34 +38,38 @@ namespace LMS.Controllers
 
         public IActionResult New(User user)
         {
-            var userData = new User
+            if (ModelState.IsValid)
             {
-                Name = user.Name,
-                Email = user.Email,
-                Phone = user.Phone,
-                UserName = user.UserName,
-                Password = user.Password,
-                RoleId = 2
-            };
-            var isUsername = _context.Users.Where(u => u.UserName == userData.UserName).FirstOrDefault();
+                var userData = new User
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    UserName = user.UserName,
+                    Password = user.Password,
+                    RoleId = 2
+                };
+                var isUsername = _context.Users.Where(u => u.UserName == userData.UserName).FirstOrDefault();
 
-            if (isUsername != null)
-            {
-                ViewBag.Message = "UserName is already taken";
-                return View("SignUp");
+                if (isUsername != null)
+                {
+                    ViewBag.Message = "UserName is already taken";
+                    return View("SignUp");
+                }
+                var isEmail = _context.Users.Where(u => u.Email == userData.Email).FirstOrDefault();
+                if (isEmail != null)
+                {
+                    ViewBag.Message = "Email is already taken";
+                    return View("SignUp");
+                }
+
+
+                _context.Users.Add(userData);
+                _context.SaveChanges();
+                _notifyService.Success("User Added");
+                return RedirectToAction("Index");
             }
-            var isEmail = _context.Users.Where(u => u.Email == userData.Email).FirstOrDefault();
-            if (isEmail != null)
-            {
-                ViewBag.Message = "Email is already taken";
-                return View("SignUp");
-            }
-
-
-            _context.Users.Add(userData);
-            _context.SaveChanges();
-            _notifyService.Success("User Added");
-            return RedirectToAction("Index");
+            return RedirectToAction("SignUp");
         }
 
         public IActionResult NewAdmin(User user)

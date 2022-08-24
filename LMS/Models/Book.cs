@@ -39,13 +39,18 @@ namespace LMS.Models
         
         [Required]
         public Category Category { get; set; }
+        
+        [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
         [Required]
         public Author Author { get; set; }
+
+        [Display(Name = "Author")]
         public int AuthorId { get; set; }
 
-        [ValidateNever]
+        [Required]
+        [Display(Name = "Image")]
         public string? ImageUrl { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
