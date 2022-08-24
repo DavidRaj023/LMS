@@ -3,12 +3,6 @@
     ViewData["Title"] = "Book";
 }
 
-@if(@ViewBag.Message != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-      @ViewBag.Message
-    </div>   
-}
 
 <div>
     <a class="btn btn-secondary" style="width:150px" asp-controller="Books" asp-action="Back" asp-route-id="index">Back</a>

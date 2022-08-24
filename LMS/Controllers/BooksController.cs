@@ -40,6 +40,12 @@ namespace LMS.Controllers
             return View("CategoryForm");
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult NewCategoryModel()
+        {
+            return PartialView("CategoryPartialView");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -143,6 +149,12 @@ namespace LMS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult SaveBooks(BookViewModel model, IFormFile? file)
         {
+            var excitingBooks = _context.Books.FirstOrDefault(b => b.Title == model.Book.Title);
+            if(excitingBooks != null)
+            {
+                _notifyService.Error("This Book is already exists");
+                return RedirectToAction("index");
+            }
             string wwwRootPath = _hostEnvironment.WebRootPath;
             if (file != null)
             {
@@ -255,8 +267,6 @@ namespace LMS.Controllers
             _context.SaveChanges();
             _notifyService.Success("Book Updated");
             return RedirectToAction("index", "Books");
-
-            return RedirectToAction("index");
         }
 
         //Delete Books

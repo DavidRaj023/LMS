@@ -16,13 +16,10 @@ namespace LMS.Controllers
         private ApplicationDbContext _context;
         public INotyfService _notifyService { get; }
 
-        private string generatedToken = null;
-        private readonly IConfiguration _config;
-
-        public AccountController(ApplicationDbContext context, IConfiguration config, INotyfService notifyService)
+        
+        public AccountController(ApplicationDbContext context,  INotyfService notifyService)
         {
             _context = context;
-            _config = config;
             _notifyService = notifyService;
         }
         public IActionResult Index()
@@ -144,7 +141,13 @@ namespace LMS.Controllers
             _notifyService.Success("Logged Off");
             return RedirectToAction("Index", "Home");
         }
-        
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+
     }
 
 }

@@ -21,9 +21,12 @@ namespace LMS.Models
 
         public bool IsReturned { get; set; } = false;
 
+        [Display(Name = "Penalty Amount")]
         public double? PenaltyAmount { get; set; }
 
+        [Display(Name = "Rented Date")]
         public DateTime DateRented { get; set; } = DateTime.Now;
+        [Display(Name = "Return Date")]
         public DateTime? DateReturn { get; set; }
 
     }

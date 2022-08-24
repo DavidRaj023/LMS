@@ -20,6 +20,7 @@ namespace LMS.Models
         public int BookId { get; set; }
 
         [Required]
+        [Display(Name = "Star Value")]
         public int StarValue { get; set; }
         [Required]
         public string Description { get; set; }
