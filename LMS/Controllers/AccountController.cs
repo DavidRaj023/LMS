@@ -1,4 +1,5 @@
-﻿using LMS.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using LMS.Data;
 using LMS.Models;
 using LMS.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -13,15 +14,16 @@ namespace LMS.Controllers
     public class AccountController : Controller
     {
         private ApplicationDbContext _context;
-        private readonly ITokenService _tokenService;
+        public INotyfService _notifyService { get; }
+
         private string generatedToken = null;
         private readonly IConfiguration _config;
 
-        public AccountController(ApplicationDbContext context, ITokenService tokenService, IConfiguration config)
+        public AccountController(ApplicationDbContext context, IConfiguration config, INotyfService notifyService)
         {
             _context = context;
-            _tokenService = tokenService;
             _config = config;
+            _notifyService = notifyService;
         }
         public IActionResult Index()
         {
@@ -65,6 +67,7 @@ namespace LMS.Controllers
 
             _context.Users.Add(userData);
             _context.SaveChanges();
+            _notifyService.Success("User Added");
             return RedirectToAction("Index");
         }
 
@@ -81,6 +84,7 @@ namespace LMS.Controllers
             };
             _context.Users.Add(userData);
             _context.SaveChanges();
+            _notifyService.Success("New Admin Added");
             return RedirectToAction("Index", "Home");
         }
 
@@ -95,8 +99,8 @@ namespace LMS.Controllers
                 return View("index");
             }
 
-            var user = _context.Users.Include(u =>u.Role).FirstOrDefault(x => x.UserName == userModel.UserName);
-            if(user == null)
+            var user = _context.Users.Include(u => u.Role).FirstOrDefault(x => x.UserName == userModel.UserName);
+            if (user == null)
             {
                 ViewBag.Message = "Invalid User";
                 return View("index");
@@ -127,6 +131,7 @@ namespace LMS.Controllers
               new ClaimsPrincipal(claimsIdentity),
               authProperties
             );
+            _notifyService.Success("Welcom back " + user.Name + " !");
             return RedirectToAction("Index", "Home");
 
             /*var t = HttpContext.User.Identity.IsAuthenticated;*/
@@ -136,6 +141,7 @@ namespace LMS.Controllers
         public async Task<IActionResult> LogOff()
         {
             await HttpContext.SignOutAsync();
+            _notifyService.Success("Logged Off");
             return RedirectToAction("Index", "Home");
         }
         

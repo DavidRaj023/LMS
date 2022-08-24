@@ -21,16 +21,32 @@
 <div class="row">
     @foreach(var book in Model)
     {
-        <div class="col-sm-3 btn">
+        <div class="col-sm-3 btn bookcard">
             <div class="card shadow-sm" style="width: 14rem;" >
               <img class="card-img-top" src="@book.ImageUrl" alt="Card image Book"/ style="width: 100%; height: 15vw; object-fit: scale-down; padding: 10px;">
-              <div class="card-header">
+              <div class="card-header" style="height:100px">
                 <h6 class="card-text">@book.Title</h6>
               </div>
               
-              <div class="card-footer">
-                    <a class="btn btn-outline-primary form-control"  asp-controller="Books" asp-action="index" asp-route-id=@book.Id>More Info</a>    
-              </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="card-footer" >
+                        <div class="row">
+                            <div class="col-6">
+                                <a class="btn btn-outline-primary form-control"   asp-controller="Books" asp-action="EditBook" asp-route-id=@book.Id>Edit</a>    
+                            </div>
+                            <div class="col-6">
+                                <a class="btn btn-outline-danger form-control" new { onclick = "return confirm('Are sure wants to delete?');" }) asp-controller="Books" asp-action="DeleteBook" asp-route-id=@book.Id >Delete</a>    
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer">
+                        <a class="btn btn-outline-primary form-control"  asp-controller="Books" asp-action="index" asp-route-id=@book.Id>Details</a>    
+                    </div>
+                }
             </div>
         </div>
     }

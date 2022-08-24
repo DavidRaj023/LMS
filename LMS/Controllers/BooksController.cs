@@ -47,6 +47,7 @@ namespace LMS.Controllers
         {
             _context.Categories.Add(model);
             _context.SaveChanges();
+            _notifyService.Success("New Category Added");
             return RedirectToAction("Category", "Books");
         }
 
@@ -70,6 +71,7 @@ namespace LMS.Controllers
         {
             _context.Authors.Add(model);
             _context.SaveChanges();
+            _notifyService.Success("New Author Added");
             return RedirectToAction("Authors", "Books");
         }
 
@@ -134,6 +136,8 @@ namespace LMS.Controllers
             return View("BookForm", viewModel);
         }
 
+       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -164,7 +168,111 @@ namespace LMS.Controllers
                 _context.Books.Add(model.Book);
             }
             _context.SaveChanges();
+            _notifyService.Success("New Book Added");
             return RedirectToAction("index", "Books");
+        }
+
+        //Edit
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditBook(int id)
+        {
+            var bookDetails = _context.Books.FirstOrDefault(b => b.Id == id);
+            if (bookDetails == null)
+            {
+                _notifyService.Error("Can't find the book");
+                return RedirectToAction("index");
+            }
+
+            var categoryList = _context.Categories.Select(a => new SelectListItem()
+            {
+                Value = a.Id.ToString(),
+                Text = a.Name
+            }).ToList();
+
+            var authorList = _context.Authors.Select(a => new SelectListItem()
+            {
+                Value = a.Id.ToString(),
+                Text = a.Name
+            }).ToList();
+
+            var viewModel = new BookViewModel
+            {
+                CategoryList = categoryList,
+                AuthorList = authorList,
+                Book = bookDetails
+            };
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult UpdateBook(BookViewModel model, IFormFile? file)
+        {
+            string wwwRootPath = _hostEnvironment.WebRootPath;
+            if (file != null)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                var uploads = Path.Combine(wwwRootPath, @"Images\books");
+                var extension = Path.GetExtension(file.FileName);
+
+                if (model.Book.ImageUrl != null)
+                {
+                    var oldImagePath = Path.Combine(wwwRootPath, model.Book.ImageUrl.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    file.CopyTo(fileStreams);
+                }
+                model.Book.ImageUrl = @"\Images\books\" + fileName + extension;
+            }
+
+            var existingBook = _context.Books.FirstOrDefault(b => b.Id == model.Book.Id);
+            if (existingBook == null)
+            {
+                _notifyService.Error("Somthing went wrong please try again");
+                return RedirectToAction("index");
+            }
+            existingBook.Title = model.Book.Title;
+            existingBook.Description = model.Book.Description;
+            existingBook.PublicationDate = model.Book.PublicationDate;
+            existingBook.Language = model.Book.Language;
+            existingBook.Edition = model.Book.Edition;
+            existingBook.NumberOfCopies = model.Book.NumberOfCopies;
+            existingBook.RackId = model.Book.RackId;
+            existingBook.ReturnThreshold = model.Book.ReturnThreshold;
+            existingBook.Category = model.Book.Category;
+            existingBook.CategoryId = model.Book.CategoryId;
+            existingBook.Author = model.Book.Author;
+            existingBook.AuthorId = model.Book.AuthorId;
+            if(file != null)
+            {
+                existingBook.ImageUrl = model.Book.ImageUrl;
+            }
+            _context.SaveChanges();
+            _notifyService.Success("Book Updated");
+            return RedirectToAction("index", "Books");
+
+            return RedirectToAction("index");
+        }
+
+        //Delete Books
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteBook(int id)
+        {
+            var bookDetails = _context.Books.FirstOrDefault(b => b.Id == id);
+            if (bookDetails == null)
+            {
+                _notifyService.Error("Not able to find the book");
+                return View("index");
+            }
+            bookDetails.IsAvailable = false;
+            _context.SaveChanges();
+            _notifyService.Success("Book Removed");
+            return RedirectToAction("index");
         }
 
         //AddReading
@@ -202,7 +310,7 @@ namespace LMS.Controllers
             _context.Rentals.Add(rendal);
             _context.SaveChanges();
             
-            _notifyService.Success("Added to My Readings");
+            _notifyService.Success("Added to your Readings");
             return RedirectToAction("Index", bookId);
         }
 
@@ -254,9 +362,24 @@ namespace LMS.Controllers
             _context.Reviews.Add(myReview);
             //Change 
             rentalDetials.IsReturned = true;
+            rentalDetials.DateReturn = DateTime.Now;
             bookDetials.NumberOfCopies++;
             _context.SaveChanges();
+            _notifyService.Success("Book Returned");
             return RedirectToAction("MyReadings", "Books");
+        }
+
+        public IActionResult Rentals()
+        {
+            var rentalDetials = _context.Rentals
+                .Include(r => r.User)
+                .Include(r => r.Book).ToList();
+            return View(rentalDetials);
+        }
+
+        public IActionResult Back(string id)
+        {
+            return RedirectToAction(id);
         }
     }
 }

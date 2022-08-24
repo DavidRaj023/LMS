@@ -1,6 +1,6 @@
 ﻿@model LMS.ViewModel.BookViewModel
 
-<form method="post", asp-action="SaveBooks", asp-controller="Books" enctype="multipart/form-data">
+<form method="post", asp-action="UpdateBook", asp-controller="Books" enctype="multipart/form-data">
     <input asp-for="Book.Id" hidden />
 	<input asp-for="Book.ImageUrl" hidden />
 
@@ -9,7 +9,7 @@
 			<div class="border p-3 mt-4 row">
 		<div class="col-12 pb-2">
 			@*<h2 class="text-primary">@(@Model.Book.Id!=0?"Update": "Create")  Books</h2>*@
-			<h2 class="text-primary">Add Books</h2>
+			<h2 class="text-primary">Update Books</h2>
 			<hr />
 		</div>
 
@@ -85,7 +85,7 @@
 		</div>
 
 		<div class="col-12">
-			<button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+			<button type="submit" class="btn btn-primary" style="width:150px">Update</button>
 			<a asp-controller="Books" asp-action="Index" class="btn btn-secondary" style="width:150px">
 				Back to List
 			</a>

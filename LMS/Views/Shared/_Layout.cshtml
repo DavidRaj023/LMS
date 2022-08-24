@@ -32,12 +32,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Authors">Authors</a>
                         </li>
 
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <a class="nav-link text-dark " asp-area="" asp-controller="Books" asp-action="Rentals">Rental Detials</a>
+                            </li>
+                        }
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li>
                                 <a class="nav-link text-primary " asp-area="" asp-controller="Books" asp-action="MyReadings">My Readings</a>
                             </li>
                         }
+                        
                     </ul>
                     @Html.Partial("_LoginPartial")
                     @*<ul class="nav navbar-nav navbar-right">
