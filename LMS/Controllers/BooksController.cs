@@ -27,61 +27,12 @@ namespace LMS.Controllers
             _context.Dispose();
         }
 
-        //Category
-        public IActionResult Category()
-        {
-            var categories = _context.Categories.ToList();
-            return View("Category", categories);
-        }
 
-        [Authorize(Roles ="Admin")]
-        public IActionResult NewCategory()
-        {
-            return View("CategoryForm");
-        }
+        /*
+         * Books
+        */
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult NewCategoryModel()
-        {
-            return PartialView("CategoryPartialView");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public IActionResult SaveCategory(Category model)
-        {
-            _context.Categories.Add(model);
-            _context.SaveChanges();
-            _notifyService.Success("New Category Added");
-            return RedirectToAction("Category", "Books");
-        }
-
-        //Author
-        public IActionResult Authors()
-        {
-            var authors = _context.Authors.ToList();
-            return View("Author", authors);
-        }
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult NewAuthor()
-        {
-            return View("AuthorForm");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public IActionResult SaveAuthor(Author model)
-        {
-            _context.Authors.Add(model);
-            _context.SaveChanges();
-            _notifyService.Success("New Author Added");
-            return RedirectToAction("Authors", "Books");
-        }
-
-        //Books
+        /* Books List: User & Admin  */
         public IActionResult Index(int? id)
         {
             if (id == null || id == 0)
@@ -100,27 +51,8 @@ namespace LMS.Controllers
             return View("book", book);
         }
 
-        //Books/filter?category=3
-        //Books/filter?author=3
-        public IActionResult Filter(int? category, int? author)
-        {
-            if(category != null || author != null)
-            {
-                if (category.HasValue)
-                {
-                    var books = _context.Books.Where(b => b.Category.Id == category);
-                    return View("index", books);
-                }
-                if (author.HasValue)
-                {
-                    var books = _context.Books.Where(b =>b.Author.Id == author).ToList();
-                    return View("index", books);
-                }
-            }
-            return RedirectToAction("index", "Books");
-        }
-
-        [Authorize(Roles ="Admin")]
+        /* New Book Form  : Admin */
+        [Authorize(Roles = "Admin")]
         public IActionResult New()
         {
             var categoryList = _context.Categories.Select(a => new SelectListItem()
@@ -142,15 +74,14 @@ namespace LMS.Controllers
             return View("BookForm", viewModel);
         }
 
-       
-
+        /* Add New Book : Admin */
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public IActionResult SaveBooks(BookViewModel model, IFormFile? file)
         {
             var excitingBooks = _context.Books.FirstOrDefault(b => b.Title == model.Book.Title);
-            if(excitingBooks != null)
+            if (excitingBooks != null)
             {
                 _notifyService.Error("This Book is already exists");
                 return RedirectToAction("index");
@@ -184,7 +115,7 @@ namespace LMS.Controllers
             return RedirectToAction("index", "Books");
         }
 
-        //Edit
+        /* Edit Book - Edit Form : Admin  */
         [Authorize(Roles = "Admin")]
         public IActionResult EditBook(int id)
         {
@@ -216,6 +147,7 @@ namespace LMS.Controllers
             return View(viewModel);
         }
 
+        /* Update the Book : Admin  */
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateBook(BookViewModel model, IFormFile? file)
         {
@@ -260,7 +192,7 @@ namespace LMS.Controllers
             existingBook.CategoryId = model.Book.CategoryId;
             existingBook.Author = model.Book.Author;
             existingBook.AuthorId = model.Book.AuthorId;
-            if(file != null)
+            if (file != null)
             {
                 existingBook.ImageUrl = model.Book.ImageUrl;
             }
@@ -269,7 +201,7 @@ namespace LMS.Controllers
             return RedirectToAction("index", "Books");
         }
 
-        //Delete Books
+        /* Delete the Book by id : Admin */
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteBook(int id)
         {
@@ -285,7 +217,28 @@ namespace LMS.Controllers
             return RedirectToAction("index");
         }
 
-        //AddReading
+        /* Book Filters : User & Admin  */
+        //Books/filter?category=3
+        //Books/filter?author=3
+        public IActionResult Filter(int? category, int? author)
+        {
+            if (category != null || author != null)
+            {
+                if (category.HasValue)
+                {
+                    var books = _context.Books.Where(b => b.Category.Id == category);
+                    return View("index", books);
+                }
+                if (author.HasValue)
+                {
+                    var books = _context.Books.Where(b => b.Author.Id == author).ToList();
+                    return View("index", books);
+                }
+            }
+            return RedirectToAction("index", "Books");
+        }
+
+        /* Add a book to Readings : User & Admin  */
         public IActionResult AddToReadings(int bookId)
         {
             var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
@@ -293,7 +246,7 @@ namespace LMS.Controllers
             /*var myBooks = _context.Rentals
                 .Where(r => r.UserId == user.Id && r.BookId == bookId).ToList();*/
             var myBooks = _context.Rentals
-                .Where(r => r.UserId == user.Id && r.BookId == bookId && r.IsReturned ==false).ToList();
+                .Where(r => r.UserId == user.Id && r.BookId == bookId && r.IsReturned == false).ToList();
 
             if (myBooks.Count > 0)
             {
@@ -301,9 +254,9 @@ namespace LMS.Controllers
                 return RedirectToAction("Index", bookId);
             }
 
-            var bookInDb = _context.Books.Where(b => b.NumberOfCopies >0 && b.Id == bookId).FirstOrDefault();
+            var bookInDb = _context.Books.Where(b => b.NumberOfCopies > 0 && b.Id == bookId).FirstOrDefault();
 
-            if(bookInDb == null)
+            if (bookInDb == null)
             {
                 _notifyService.Error("This book is not available");
                 return RedirectToAction("Index", bookId);
@@ -316,23 +269,28 @@ namespace LMS.Controllers
             };
 
             bookInDb.NumberOfCopies--;
-            
+
             _context.Rentals.Add(rendal);
             _context.SaveChanges();
-            
+
             _notifyService.Success("Added to your Readings");
             return RedirectToAction("Index", bookId);
         }
 
+        /*
+         * My Readings
+        */
+
+        /* My Redings Page : User & Admin */
         public IActionResult MyReadings()
         {
             var user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
-            
-            var rentals = _context.Rentals.Include(r => r.Book).Where(r => r.UserId == user.Id && r.IsReturned ==false).ToList();
 
-            foreach(var rental in rentals)
+            var rentals = _context.Rentals.Include(r => r.Book).Where(r => r.UserId == user.Id && r.IsReturned == false).ToList();
+
+            foreach (var rental in rentals)
             {
-                if(DateTime.Now > rental.DateRented.AddDays(rental.Book.ReturnThreshold))
+                if (DateTime.Now > rental.DateRented.AddDays(rental.Book.ReturnThreshold))
                 {
                     rental.PenaltyAmount = 10 * Math.Truncate((DateTime.Now - rental.DateRented.AddDays(rental.Book.ReturnThreshold)).TotalDays);
                 }
@@ -341,6 +299,7 @@ namespace LMS.Controllers
             return View(rentals);
         }
 
+        /* Review Form : User & Admin  */
         public IActionResult MyReview(int rentId)
         {
             var rentDetails = _context.Rentals.FirstOrDefault(r => r.Id == rentId);
@@ -351,11 +310,12 @@ namespace LMS.Controllers
             return View(model);
         }
 
+        /* Submit a Review and Remove from My Readings : User & Admin */
         public IActionResult SubmitReview(ReviewViewModel model, int rentalId)
         {
             var rentalDetials = _context.Rentals.FirstOrDefault(r => r.Id == rentalId);
             var bookDetials = _context.Books.FirstOrDefault(b => b.Id == rentalDetials.BookId);
-            if(rentalDetials == null)
+            if (rentalDetials == null)
             {
                 _notifyService.Error("Something went wrong, Please try again");
                 return RedirectToAction("MyReadings", "Books");
@@ -379,6 +339,11 @@ namespace LMS.Controllers
             return RedirectToAction("MyReadings", "Books");
         }
 
+        /*
+         * Rentals
+        */
+
+        /* Rental Page: Admin */
         public IActionResult Rentals()
         {
             var rentalDetials = _context.Rentals
@@ -387,6 +352,78 @@ namespace LMS.Controllers
             return View(rentalDetials);
         }
 
+        /*
+         * Category
+        */
+
+        /* Category List */
+        public IActionResult Category()
+        {
+            var categories = _context.Categories.ToList();
+            return View("Category", categories);
+        }
+
+        /* Add New Category*/
+        [Authorize(Roles ="Admin")]
+        public IActionResult NewCategory()
+        {
+            return View("CategoryForm");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult NewCategoryModel()
+        {
+            return PartialView("CategoryPartialView");
+        }
+
+        /* Add New Category */
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult SaveCategory(Category model)
+        {
+            _context.Categories.Add(model);
+            _context.SaveChanges();
+            _notifyService.Success("New Category Added");
+            return RedirectToAction("Category", "Books");
+        }
+
+        /*
+         * Authors
+        */
+
+        /* Authors List */
+        public IActionResult Authors()
+        {
+            var authors = _context.Authors.ToList();
+            return View("Author", authors);
+        }
+
+        /* Author Form */
+        [Authorize(Roles = "Admin")]
+        public IActionResult NewAuthor()
+        {
+            return View("AuthorForm");
+        }
+
+        /* Add New Author */
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult SaveAuthor(Author model)
+        {
+            _context.Authors.Add(model);
+            _context.SaveChanges();
+            _notifyService.Success("New Author Added");
+            return RedirectToAction("Authors", "Books");
+        }
+
+        
+        /*
+         * Other Functions
+        */
+
+        /* Go to Back Function */
         public IActionResult Back(string id)
         {
             return RedirectToAction(id);
