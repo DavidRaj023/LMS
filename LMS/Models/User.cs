@@ -13,6 +13,7 @@ namespace LMS.Models
         public string Email { get; set; }
         public int Phone { get; set; }
         [Required]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
         [Required]
         public string Password { get; set; }

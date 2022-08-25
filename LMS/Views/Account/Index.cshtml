@@ -16,25 +16,29 @@
 }
 @using (Html.BeginForm("Login", "Account"))
 {
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            <label asp-for=UserName class="control-label"></label>
-        </div>
-        <div class="col-sm-3">
-            <input asp-for=UserName class="form-control" />
-             <span asp-validation-for=UserName class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            <label asp-for=Password class="control-label"></label>
-        </div>
-        <div class="col-sm-3">
-            <input asp-for=Password class="form-control" />
-             <span asp-validation-for=Password class="text-danger"></span>
-        </div>
-    </div>
+    <div class="row">
+        <div class="col">
+            <div class="row mb-3">
+                <div class="col-sm-1 col-form-label">
+                    <label asp-for=UserName class="control-label"></label>
+                </div>
+                <div class="col-sm-3">
+                    <input asp-for=UserName class="form-control" />
+                     <span asp-validation-for=UserName class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-1 col-form-label">
+                    <label asp-for=Password class="control-label"></label>
+                </div>
+                <div class="col-sm-3">
+                    <input asp-for=Password class="form-control" />
+                     <span asp-validation-for=Password class="text-danger"></span>
+                </div>
+            </div>
 
-    <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </div>
 }
 <a asp-controller="Account" asp-action="SignUp">Click here to signup</a>
