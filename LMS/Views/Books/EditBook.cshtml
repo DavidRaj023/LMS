@@ -63,7 +63,6 @@
 
 		<div class="mb-3 col-6">
 			<label asp-for="Book.Category"></label>
-			<a class="btn btn-link float-lg-end" >New</a>
 			<select asp-for="Book.CategoryId" asp-items="@Model.CategoryList" class="form-select">
 				<option disabled selected>--Select Category--</option>
 			</select>
@@ -72,7 +71,6 @@
 
 		<div class="mb-3 col-6">
 			<label asp-for="Book.Author"></label>
-			<a class="btn btn-link float-lg-end" >New</a>
 			<select asp-for="Book.AuthorId" asp-items="@Model.AuthorList" class="form-select">
 				<option disabled selected>--Select Author--</option>
 			</select>

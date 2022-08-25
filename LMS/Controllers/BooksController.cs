@@ -48,7 +48,18 @@ namespace LMS.Controllers
                     .Include(b => b.Category)
                     .Include(b => b.Author)
                     .FirstOrDefault(b => b.Id == id);
-            return View("book", book);
+            if(book != null)
+            {
+                var review = _context.Reviews.Include(r => r.User).Where(r => r.BookId == id);
+                var bookReview = new BookReviewModel
+                {
+                    Book = book,
+                    Review = review
+                };
+                return View("book", bookReview);
+            }
+            _notifyService.Error("Book Not Found");
+            return RedirectToAction("index");
         }
 
         /* New Book Form  : Admin */
