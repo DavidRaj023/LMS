@@ -11,6 +11,8 @@ namespace LMS.ViewModel
         [ValidateNever]
         public IEnumerable<SelectListItem> AuthorList { get; set; }
         public Book Book { get; set; }
+        public Category Category { get; set; }
+        public Author Author { get; set; }  
 
     }
 }

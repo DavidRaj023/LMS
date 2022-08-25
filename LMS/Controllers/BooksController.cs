@@ -60,11 +60,24 @@ namespace LMS.Controllers
                 Value = a.Id.ToString(),
                 Text = a.Name
             }).ToList();
+
+            categoryList.Add(new SelectListItem
+            {
+                Value = "1000",
+                Text = "Others"
+            });
+            
             var authorList = _context.Authors.Select(a => new SelectListItem()
             {
                 Value = a.Id.ToString(),
                 Text = a.Name
             }).ToList();
+
+            authorList.Add(new SelectListItem
+            {
+                Value = "1000",
+                Text = "Others"
+            });
 
             var viewModel = new BookViewModel
             {
@@ -107,9 +120,40 @@ namespace LMS.Controllers
                     file.CopyTo(fileStreams);
                 }
                 model.Book.ImageUrl = @"\Images\books\" + fileName + extension;
-
-                _context.Books.Add(model.Book);
             }
+            else
+            {
+                model.Book.ImageUrl = @"\Images\Book.png";
+            }
+            if(model.Book.CategoryId == 1000)
+            {
+                var existingCategory = _context.Categories.FirstOrDefault(c => c.Name == model.Category.Name);
+                if(existingCategory != null)
+                {
+                    model.Book.CategoryId = existingCategory.Id;
+                }
+                else
+                {
+                    _context.Categories.Add(model.Category);
+                    _context.SaveChanges();
+                    model.Book.CategoryId = model.Category.Id;
+                }
+            }
+            if (model.Book.AuthorId == 1000)
+            {
+                var existingAuthor = _context.Authors.FirstOrDefault(c => c.Name == model.Author.Name);
+                if (existingAuthor != null)
+                {
+                    model.Book.AuthorId = existingAuthor.Id;
+                }
+                else
+                {
+                    _context.Authors.Add(model.Author);
+                    _context.SaveChanges();
+                    model.Book.AuthorId = model.Author.Id;
+                }
+            }
+            _context.Books.Add(model.Book);
             _context.SaveChanges();
             _notifyService.Success("New Book Added");
             return RedirectToAction("index", "Books");
@@ -373,7 +417,7 @@ namespace LMS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult NewCategoryModel()
         {
-            return PartialView("CategoryPartialView");
+            return PartialView("CategoryPartial");
         }
 
         /* Add New Category */
