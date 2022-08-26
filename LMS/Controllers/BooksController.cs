@@ -107,7 +107,7 @@ namespace LMS.Controllers
             var excitingBooks = _context.Books.FirstOrDefault(b => b.Title == model.Book.Title);
             if (excitingBooks != null)
             {
-                _notifyService.Error("This Book is already exists");
+                _notifyService.Error("This Book is Exists");
                 return RedirectToAction("index");
             }
             string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -281,12 +281,13 @@ namespace LMS.Controllers
             {
                 if (category.HasValue)
                 {
-                    var books = _context.Books.Where(b => b.Category.Id == category);
+                    var books = _context.Books
+                        .Where(b => b.Category.Id == category && b.IsAvailable == true).ToList();
                     return View("index", books);
                 }
                 if (author.HasValue)
                 {
-                    var books = _context.Books.Where(b => b.Author.Id == author).ToList();
+                    var books = _context.Books.Where(b => b.Author.Id == author && b.IsAvailable == true).ToList();
                     return View("index", books);
                 }
             }
@@ -399,12 +400,23 @@ namespace LMS.Controllers
         */
 
         /* Rental Page: Admin */
+        [HttpGet]
         public IActionResult Rentals()
         {
             var rentalDetials = _context.Rentals
                 .Include(r => r.User)
                 .Include(r => r.Book).ToList();
             return View(rentalDetials);
+        }
+
+        
+        public IActionResult GetRentals()
+        {
+            var rentalDetials = _context.Rentals
+                .Include(r => r.User)
+                .Include(r => r.Book).ToList();
+
+            return Json(rentalDetials);
         }
 
         /*

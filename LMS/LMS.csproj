@@ -11,6 +11,8 @@
     <PackageReference Include="bootbox" Version="4.3.0" />
     <PackageReference Include="Bootbox.JS" Version="5.5.2" />
     <PackageReference Include="BoxBot" Version="2.2.0" />
+    <PackageReference Include="jQuery" Version="3.6.0" />
+    <PackageReference Include="jquery.datatables" Version="1.10.15" />
     <PackageReference Include="jQuery.Validation" Version="1.19.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />

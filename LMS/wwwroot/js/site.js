@@ -15,3 +15,9 @@
         })
     })
 })*/
+
+/*$(".nav-link").on("click", function () {
+    console.log("OnCLick s")
+    $(".nav").find(".active").removeClass("active");
+    $(this).addClass("active");
+});*/

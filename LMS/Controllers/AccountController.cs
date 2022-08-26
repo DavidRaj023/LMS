@@ -66,7 +66,7 @@ namespace LMS.Controllers
 
                 _context.Users.Add(userData);
                 _context.SaveChanges();
-                _notifyService.Success("User Added");
+                _notifyService.Success("New User Added");
                 return RedirectToAction("Index");
             }
             return RedirectToAction("SignUp");
@@ -132,7 +132,7 @@ namespace LMS.Controllers
               new ClaimsPrincipal(claimsIdentity),
               authProperties
             );
-            _notifyService.Success("Welcom back " + user.Name + " !");
+            _notifyService.Success("Welcom Back " + user.Name + " !");
             return RedirectToAction("Index", "Home");
 
             /*var t = HttpContext.User.Identity.IsAuthenticated;*/

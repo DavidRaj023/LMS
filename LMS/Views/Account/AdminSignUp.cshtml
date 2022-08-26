@@ -4,51 +4,58 @@
 }
 
 <div class="text-Left">
-    <h3 class="display-7">Add Admin</h3>
+    <h3 class="display-7">Register Admin</h3>
     @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
 </div>
 
 @using (Html.BeginForm("NewAdmin", "Account"))
 {
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            <label asp-for=Name class="control-label"></label>
+    <div class="row">
+        <div class="col">
+            <img class="d-block w-75" src="~/Images/Signup.png" >
         </div>
-        <div class="col-sm-3">
-            <input asp-for=Name class="form-control" />
-             <span asp-validation-for=Name class="text-danger"></span>
+        <div class="col">
+            <div class="row mb-3 ">
+                <div class="col-2 col-form-label">
+                    <label asp-for=Name class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for=Name class="form-control" />
+                     <span asp-validation-for=Name class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2 col-form-label">
+                    <label asp-for=Email class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for=Email class="form-control" />
+                     <span asp-validation-for=Email class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2 col-form-label">
+                    <label asp-for=UserName class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for=UserName class="form-control" />
+                     <span asp-validation-for=UserName class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2 col-form-label">
+                    <label asp-for=Password class="control-label"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for=Password class="form-control" type="password"/>
+                     <span asp-validation-for=Password class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6" >
+                    <button type="submit" class="btn btn-primary" >Register</button>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            <label asp-for=Email class="control-label"></label>
-        </div>
-        <div class="col-sm-3">
-            <input asp-for=Email class="form-control" />
-             <span asp-validation-for=Email class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            <label asp-for=UserName class="control-label"></label>
-        </div>
-        <div class="col-sm-3">
-            <input asp-for=UserName class="form-control" />
-             <span asp-validation-for=UserName class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-1 col-form-label">
-            <label asp-for=Password class="control-label"></label>
-        </div>
-        <div class="col-sm-3">
-            <input asp-for=Password class="form-control" />
-             <span asp-validation-for=Password class="text-danger"></span>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">SignUp</button>
 }
