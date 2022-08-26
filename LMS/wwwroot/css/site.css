@@ -30,6 +30,7 @@ navbar {
 #home{
     display: flex;
     justify-content: center;
+    padding-top: 35px;
 }
 #carouselExampleIndicators {
     max-width: 30%;
